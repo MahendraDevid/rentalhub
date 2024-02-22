@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Daftar Mobil{% endblock %}</title>
+</head>
+<body>
+    <h1>{% block heading %}Daftar Mobil{% endblock %}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Merek</th>
+                <th>Model</th>
+                <th>Tahun</th>
+                <th>Status</th>
+                {% if user.is_authenticated and is_admin %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for mobil in mobil %}
+                <tr>
+                    <td>{{ mobil.Merek }}</td>
+                    <td>{{ mobil.Model }}</td>
+                    <td>{{ mobil.Tahun }}</td>
+                    <td>{{ mobil.Status }}</td>
+                    {% if user.is_authenticated and is_admin %}
+                        <td>
+                            <a href="{% url 'mobil_update' mobil.MobilID %}">Update</a>
+                            <a href="{% url 'mobil_delete' mobil.MobilID %}">Delete</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Tidak ada mobil.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if user.is_authenticated and is_admin %}
+        <a href="{% url 'mobil_create' %}">Tambah Mobil</a>
+    {% endif %}
+</body>
+</html>
