@@ -8,11 +8,12 @@ from .utils import is_admin
 
 @login_required
 def mobil_list(request):
-    if is_admin(request.user):
-        mobil = Mobil.objects.all()
+    context = {'mobil': None, 'is_admin': is_admin(request.user)}
+    if context['is_admin']:
+        context['mobil'] = Mobil.objects.all()
     else:
-        mobil = Mobil.objects.filter(Status='Tersedia')  # Hanya tampilkan mobil yang tersedia untuk pembeli
-    return render(request, 'cars/mobil_list.html', {'mobil': mobil})
+        context['mobil'] = Mobil.objects.filter(Status='Tersedia')
+    return render(request, 'cars/mobil_list.html', context)
 
 @login_required
 def mobil_detail(request, mobil_id):
@@ -32,7 +33,8 @@ def mobil_create(request):
             return redirect('mobil_list')
     else:
         form = MobilForm()
-    return render(request, 'cars/mobil_form.html', {'form': form})
+    context = {'form': form, 'is_admin': is_admin(request.user)}
+    return render(request, 'cars/mobil_form.html', context)
 
 @login_required
 def mobil_update(request, mobil_id):
@@ -47,7 +49,8 @@ def mobil_update(request, mobil_id):
             return redirect('mobil_list')
     else:
         form = MobilForm(instance=mobil)
-    return render(request, 'cars/mobil_form.html', {'form': form})
+    context = {'form': form, 'is_admin': is_admin(request.user)}
+    return render(request, 'cars/mobil_form.html', context)
 
 @login_required
 def mobil_delete(request, mobil_id):
@@ -57,3 +60,4 @@ def mobil_delete(request, mobil_id):
     mobil = get_object_or_404(Mobil, MobilID=mobil_id)
     mobil.delete()
     return redirect('mobil_list')
+

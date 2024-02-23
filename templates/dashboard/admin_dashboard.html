@@ -55,6 +55,10 @@
         {% if user.is_authenticated and is_admin %}
         <a href="{% url 'user_list' %}">Lihat Daftar Pengguna</a>
         {% endif %}
+        <br>
+        {% if user.is_authenticated and is_admin %}
+        <a href="{% url 'mobil_list' %}">Lihat Daftar Mobil</a>
+        {% endif %}
     
     </div>
 </body>
